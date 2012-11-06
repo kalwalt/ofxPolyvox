@@ -73,7 +73,7 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
 
     ofVec3f ofVecVertices;
 
-    vector <ofVec3f> points;
+
      for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
 
 
@@ -85,6 +85,21 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
     polyvxToOfMesh.addVertex(ofVecVertices);
 
     }
+
+    ofVec3f ofVecNormals;
+
+     for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
+
+
+    PositionMaterialNormal vert0 = vecVertices[i];
+
+
+    ofVecNormals = ofVec3f(vert0.getNormal().getX(),vert0.getNormal().getY(),vert0.getNormal().getZ());
+
+    polyvxToOfMesh.addNormal(ofVecNormals);
+
+    }
+
 
 
 }

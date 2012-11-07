@@ -1,0 +1,193 @@
+#include "testApp.h"
+#include "ofxPolyvox.h"
+#include "PolyVoxCore/MarchingCubesSurfaceExtractor.h"
+#include "PolyVoxCore/RawVolume.h"
+#include "PolyVoxCore/MaterialDensityPair.h"
+#include "PolyVoxCore/Density.h"
+#include "PolyVoxCore/PolyVoxForwardDeclarations.h"
+#include "PolyVoxCore/LowPassFilter.h"
+//Use the PolyVox namespace
+using namespace PolyVox;
+
+void testExecute(RawVolume<Density8>& volData)
+{
+	const int32_t g_uVolumeSideLength = 255;
+
+	//Create two solid walls at opposite sides of the volume
+	for (int32_t z = 0; z < g_uVolumeSideLength; z++)
+	{
+		for (int32_t y = 0; y < g_uVolumeSideLength; y++)
+		{
+			for (int32_t x = 0; x < g_uVolumeSideLength; x++)
+			{
+				if(x % 2 == 0)
+				{
+					//Density8 voxel(32);
+					Density8 voxel(210);
+					volData.setVoxelAt(x, y, z, voxel);
+				}
+			}
+		}
+	}
+}
+
+void createSphereInVolume(RawVolume<Density8>& volData, float fRadius)
+{
+	//This vector hold the position of the center of the volume
+	Vector3DFloat v3dVolCenter(volData.getWidth() / 2, volData.getHeight() / 2, volData.getDepth() / 2);
+
+	//This three-level for loop iterates over every voxel in the volume
+	for (int z = 0; z < volData.getWidth(); z++)
+	{
+		for (int y = 0; y < volData.getHeight(); y++)
+		{
+			for (int x = 0; x < volData.getDepth(); x++)
+			{
+				//Store our current position as a vector...
+				Vector3DFloat v3dCurrentPos(x,y,z);
+				//And compute how far the current position is from the center of the volume
+				float fDistToCenter = (v3dCurrentPos - v3dVolCenter).length();
+
+				uint8_t uMaterial = 0;
+				Density8 voxel;
+
+				//If the current voxel is less than 'radius' units from the center then we make it solid.
+				if(fDistToCenter <= fRadius)
+				{
+					//Our new density value
+					uMaterial = 1;
+                    voxel =255;
+
+				}
+
+				//Get the old voxel
+				//Material8 voxel = volData.getVoxelAt(x,y,z);
+
+				//Modify the density and material
+				//voxel.setMaterial(uMaterial);
+
+				//Wrte the voxel value into the volume
+				//volData.setVoxelAt(x, y, z, uMaterial);
+				volData.setVoxelAt(x, y, z, voxel);
+			}
+		}
+	}
+}
+//--------------------------------------------------------------
+void testApp::setup(){
+    //We'll be rendering with index/vertex arrays
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	const int32_t g_uVolumeSideLength = 255;
+
+	PolyVox::Region reg(Vector3DInt32(0,0,0), Vector3DInt32(g_uVolumeSideLength-1, g_uVolumeSideLength-1, g_uVolumeSideLength-1));
+
+	//Create empty volume
+	RawVolume<Density8> volData(reg);
+	//testExecute(volData);
+	createSphereInVolume(volData,210);
+
+    RawVolume<Density8> resultVolume(reg);
+
+	LowPassFilter< RawVolume<Density8>, RawVolume<Density8> > pass1(&volData, reg, &resultVolume, reg, 5);
+
+	pass1.execute();
+
+	std::cout << "Input volume:" << std::endl;
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(0,0,0).getDensity()) << std::endl; // 32
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(1,1,1).getDensity()) << std::endl; // 0
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(2,2,2).getDensity()) << std::endl; // 3
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(3,3,3).getDensity()) << std::endl; // 0
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(4,4,4).getDensity()) << std::endl; // 32
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(5,5,5).getDensity()) << std::endl; // 0
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(6,6,6).getDensity()) << std::endl; // 32
+	std::cout << "Voxel = " << static_cast<int>(volData.getVoxelAt(7,7,7).getDensity()) << std::endl; // 0
+
+	std::cout << std::endl << "Output volume:" << std::endl;
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(0,0,0).getDensity()) << std::endl; // 4
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(1,1,1).getDensity()) << std::endl; // 21
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(2,2,2).getDensity()) << std::endl; // 10
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(3,3,3).getDensity()) << std::endl; // 21
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(4,4,4).getDensity()) << std::endl; // 10
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(5,5,5).getDensity()) << std::endl; // 21
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(6,6,6).getDensity()) << std::endl; // 10
+	std::cout << "Voxel = " << static_cast<int>(resultVolume.getVoxelAt(7,7,7).getDensity()) << std::endl; // 4
+
+	SurfaceMesh<PositionMaterialNormal> mesh;
+
+	//CubicSurfaceExtractorWithNormals< RawVolume<Density8> > surfaceExtractor(&resultVolume, resultVolume.getEnclosingRegion(), &mesh);
+	MarchingCubesSurfaceExtractor< RawVolume<Density8> > surfaceExtractor(&resultVolume, resultVolume.getEnclosingRegion(), &mesh);
+	surfaceExtractor.execute();
+
+    cout << "No. vertices=" << mesh.getNoOfVertices() << endl;
+
+    polyvox.setSurfaceMeshToRender(mesh);
+
+}
+
+//--------------------------------------------------------------
+void testApp::update(){
+}
+
+//--------------------------------------------------------------
+void testApp::draw(){
+
+     cam.begin();
+    //Enable smooth lighting
+
+	ofEnableLighting();
+
+	glEnable(GL_LIGHT0);
+
+    ofScale(200,200,200);
+    polyvox.draw();
+    cam.end();
+
+}
+
+//--------------------------------------------------------------
+void testApp::keyPressed(int key){
+
+}
+
+//--------------------------------------------------------------
+void testApp::keyReleased(int key){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mouseMoved(int x, int y ){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mouseDragged(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mousePressed(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mouseReleased(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void testApp::windowResized(int w, int h){
+
+}
+
+//--------------------------------------------------------------
+void testApp::gotMessage(ofMessage msg){
+
+}
+
+//--------------------------------------------------------------
+void testApp::dragEvent(ofDragInfo dragInfo){
+
+}
+

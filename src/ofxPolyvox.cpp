@@ -49,7 +49,7 @@ void ofxPolyvox::extractSurface( PolyVox::SurfaceMesh<PositionMaterialNormal>& s
 
 }
 
-void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofMesh& polyvxToOfMesh){
+void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofMesh& polyvxToOfMesh, bool setColor){
 
     //Convienient access to the vertices and indices
 	const vector<uint32_t>& vecIndices = surfaceMesh.getIndices();
@@ -88,7 +88,7 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
 
     ofVec3f ofVecNormals;
 
-     for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
+    for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
 
 
     PositionMaterialNormal vert0 = vecVertices[i];
@@ -101,6 +101,28 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
     }
 
 
+    if(setColor){
+
+        for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
+
+        PositionMaterialNormal vert0 = vecVertices[i];
+
+        uint8_t material = static_cast<uint8_t>(vert0.getMaterial() + 0.5);
+
+        //cout << "material:" << int(material) << endl;
+
+        ofFloatColor colour = convertMaterialIDToColour(material);
+
+        //cout << colour << endl;
+
+        polyvxToOfMesh.addColor(colour);
+
+        bool col = polyvxToOfMesh.hasColors();
+
+        //cout << "hasColors:" << col << endl;
+        }
+
+    }
 
 }
 

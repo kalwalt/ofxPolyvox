@@ -16,7 +16,7 @@ class ofxPolyvox
 
         void setSurfaceMeshToRender(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh);
         void extractSurface( PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, SimpleVolume<uint8_t> volData);
-        void polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofMesh& polyvxToOfMesh);
+       void polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofMesh& polyvxToOfMesh, bool setColor);
         void polyvoxToOfVbo(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofVbo& vbo );
         void draw();
         void drawWireframe();

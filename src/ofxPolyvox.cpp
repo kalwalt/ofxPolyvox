@@ -215,37 +215,4 @@ void ofxPolyvox::drawWireframe(){
 
 }
 
-ofxVboPolyvox::ofxVboPolyvox(){}
-
-void ofxVboPolyvox::setIndexData(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh,  int usage){
-
-    //Convienient access to the vertices and indices
-	const vector<uint32_t>& vecIndices = surfaceMesh.getIndices();
-
-
-	glGenBuffers(1, &(indexBuffer));
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-	const GLvoid* pIndices = static_cast<const GLvoid*>(&(vecIndices[0]));
-
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vecIndices.size() * sizeof(uint32_t), pIndices, usage);
-
-	m_uEndIndex = vecIndices.size();
-    m_uBeginIndex = 0;
-
-}
-
-void ofxVboPolyvox::setVertexData(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, int usage){
-
-    const vector<PositionMaterialNormal>& vecVertices = surfaceMesh.getVertices();
-    //Build an OpenGL vertex buffer
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	const GLvoid* pVertices = static_cast<const GLvoid*>(&(vecVertices[0]));
-	glBufferData(GL_ARRAY_BUFFER, vecVertices.size() * sizeof(PositionMaterialNormal), pVertices, usage);
-
-
-}
-
 

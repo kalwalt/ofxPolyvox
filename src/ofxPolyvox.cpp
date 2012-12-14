@@ -70,6 +70,7 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
     polyvxToOfMesh.addIndex(indx[i]);
      }
 
+	ofLog(OF_LOG_NOTICE, "number of indices is %d", polyvxToOfMesh.getNumIndices());	
 
     ofVec3f ofVecVertices;
 
@@ -86,6 +87,8 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
 
     }
 
+	 ofLog(OF_LOG_NOTICE, "number of vertices is %d", polyvxToOfMesh.getNumVertices());
+
     ofVec3f ofVecNormals;
 
     for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
@@ -99,6 +102,8 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
     polyvxToOfMesh.addNormal(ofVecNormals);
 
     }
+
+	ofLog(OF_LOG_NOTICE, "number of normals is %d", polyvxToOfMesh.getNumNormals());
 
 
     if(setColor){
@@ -202,7 +207,8 @@ void ofxPolyvox::draw(){
 	if(errCode != GL_NO_ERROR)
 	{
 	  //What has replaced getErrorString() in the latest OpenGL?
-	  std::cout << "OpenGL Error: " << errCode << std::endl;
+	 //std::cout << "OpenGL Error: " << errCode << std::endl;
+	 ofLog(OF_LOG_ERROR, "OpenGL Error: " + errCode);
 	}
 
 

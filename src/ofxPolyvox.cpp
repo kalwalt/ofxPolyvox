@@ -221,4 +221,44 @@ void ofxPolyvox::drawWireframe(){
 
 }
 
+ofFloatColor  ofxPolyvox::convertMaterialIDToColour(int materialID)
+{
+	ofFloatColor colour;
+
+	switch(materialID)
+	{
+	case 1:
+
+		colour = ofFloatColor(1.0f,0.0f,0.0f);
+
+		break;
+	case 2:
+
+		colour = ofFloatColor(0.0f,1.0f,0.0f);
+
+		break;
+	case 3:
+
+		colour = ofFloatColor(0.0f,0.0f,1.0f);
+
+		break;
+	case 4:
+
+		colour = ofFloatColor(1.0f,1.0f,0.0f);
+
+		break;
+	case 5:
+
+		colour = ofFloatColor(1.0f,0.0f,1.0f);
+
+		break;
+	default:
+
+		colour = ofFloatColor(1.0f,1.0f,1.0f);
+	}
+
+	return colour;
+}
+
+
 

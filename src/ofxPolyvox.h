@@ -22,7 +22,9 @@ class ofxPolyvox
         void drawWireframe();
 
     private:
-   //Index/vertex buffer data
+
+	ofFloatColor  convertMaterialIDToColour(int materialID);
+   	//Index/vertex buffer data
 	GLuint m_uBeginIndex;
 	GLuint m_uEndIndex;
 	GLuint noOfIndices;

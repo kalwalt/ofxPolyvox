@@ -31,14 +31,14 @@ void createRawVolume(RawVolume<uint8_t>& volData, float fRadius)
 				if(fDistToCenter <= fRadius)
 				{
 					//Our new density value
-					
+
 					uint8_t uDensity = std::numeric_limits<uint8_t>::max();
 
-					
+
 					volData.setVoxelAt(x, y, z, uDensity);
 				}
 
-				
+
 			}
 		}
 	}
@@ -55,7 +55,7 @@ void testApp::setup(){
     PolyVox::Region reg(Vector3DInt32(0,0,0), Vector3DInt32(32, 32, 32));
     RawVolume<uint8_t> volData(reg);
 
-   
+
     createRawVolume(volData, 7);
 
     SurfaceMesh<PositionMaterialNormal> mesh;
@@ -64,9 +64,9 @@ void testApp::setup(){
 	//CubicSurfaceExtractorWithNormals< RawVolume<uint8_t> > surfaceExtractor(&volData, volData.getEnclosingRegion(), &mesh);
 	//MarchingCubesSurfaceExtractor< SimpleVolume<uint8_t> > surfaceExtractor(&volData, volData.getEnclosingRegion(), &mesh);
 	MarchingCubesSurfaceExtractor< RawVolume<uint8_t> > surfaceExtractor(&volData, volData.getEnclosingRegion(), &mesh);
-	
+
 	surfaceExtractor.execute();
-	
+
 //	this is not working for now
     //polyvox.extractSurface(mesh, volData);
 
@@ -75,11 +75,11 @@ void testApp::setup(){
     std::cout << "polyvox vertices: " << mesh.getNoOfVertices() << std::endl;
     std::cout << "polyvox indices: " << mesh.getNoOfIndices() << std::endl;
     OF_mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-    
-    polyvox.polyvoxToOfMesh(mesh,OF_mesh);
-  
+
+    polyvox.polyvoxToOfMesh(mesh,OF_mesh,true);
+
     std::cout << "OF_mesh vertices: " << OF_mesh.getNumVertices() << std::endl;
-    
+
     }
 
 //--------------------------------------------------------------
@@ -94,12 +94,12 @@ void testApp::draw(){
 
     //Enable smooth lighting
 	ofEnableLighting();
-	
+
 	glEnable(GL_LIGHT0);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	
-    
-    
+
+
+
 //if you want to render with standard gl call uncomment this
     //polyvox.draw();
 

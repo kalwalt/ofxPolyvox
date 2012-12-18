@@ -35,19 +35,6 @@ void ofxPolyvox::setSurfaceMeshToRender(const PolyVox::SurfaceMesh<PositionMater
 	m_uEndIndex = vecIndices.size();
 }
 
-void ofxPolyvox::extractSurface( PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, SimpleVolume<uint8_t> volData){
-
-    //We'll be rendering with index/vertex arrays
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	CubicSurfaceExtractorWithNormals< SimpleVolume<uint8_t> > surfaceExtractor(&volData, volData.getEnclosingRegion(), &surfaceMesh);
-	surfaceExtractor.execute();
-
-
-
-
-}
 
 void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofMesh& polyvxToOfMesh, bool setColor){
 
@@ -131,59 +118,6 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
 
 }
 
-void ofxPolyvox::polyvoxToOfVbo(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofVbo& vbo ){
-     //Convienient access to the vertices and indices
-	const vector<uint32_t>& vecIndices = surfaceMesh.getIndices();
-	const vector<PositionMaterialNormal>& vecVertices = surfaceMesh.getVertices();
-
-
-	ofIndexType ofVecIndices;
-	const void* pIndices = static_cast<const void*>(&(vecIndices[0]));
-
-	int* indices = (int*)pIndices;
-	vector <int> indx;
-
-
-   for (int i = 0; i < surfaceMesh.getNoOfIndices(); i++ ){
-
-    indx.push_back(indices[i]);
-
-
-    }
-
-    vbo.setIndexData(&indx[0], indx.size(),GL_STATIC_DRAW);
-
-	//ofVec3f ofVecVertices[surfaceMesh.getNoOfVertices()];
-	ofVec3f *ofVecVertices;
-
-    //const void* pVertices = static_cast<const void*>(&(vecVertices[0]));
-
-
-    //cout << pVertices << endl;
-
-     for (int i = 0; i < surfaceMesh.getNoOfVertices(); i++ ){
-
-
-        PositionMaterialNormal vertexes = vecVertices[i];
-
-        float x, y, z;
-
-        x = vertexes.getPosition().getX();
-        y = vertexes.getPosition().getY();
-        z = vertexes.getPosition().getZ();
-
-
-
-       ofVecVertices[i].set( x, y, z );
-
-     }
-      //cout << ofVecVertices << endl;
-      cout << "ok?" << endl;
-       vbo.setVertexData(&ofVecVertices[0], surfaceMesh.getNoOfVertices(), GL_STATIC_DRAW);
-
-
-
-}
 
 void ofxPolyvox::draw(){
 

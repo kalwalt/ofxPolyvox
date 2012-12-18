@@ -70,13 +70,13 @@ void testApp::setup(){
     // LowPassFilter used to smooth the voxel data in this case from a RawVolume (volData) , the result is stored in RawVolume (resultVolume)
 	LowPassFilter< RawVolume<Density8>, RawVolume<Density8> > pass1(&volData, reg, &resultVolume, reg, kernelSize);
 
-	cout << "kernel size = " << kernelSize << endl;
+    ofLog(OF_LOG_NOTICE, "kernel size is %d", kernelSize);
 
     //this is very important ! use executeSAT()! you can use execute() if you grab the polyvox develop branch!
 	//pass1.execute();
 	pass1.executeSAT();
 
-	cout << "LowPassFilter executed!" << endl;
+    ofLog(OF_LOG_NOTICE, "LowPassFilter executed!");
 
     SurfaceMesh<PositionMaterialNormal> mesh;
 
@@ -85,17 +85,18 @@ void testApp::setup(){
 
 	surfaceExtractor.execute();
 
-    cout << "Marching cube surface created!" << endl;
+    ofLog(OF_LOG_NOTICE, "Marching cube surface created!");
+
 
     SurfaceMesh<PositionMaterialNormal> decimatedMesh;
     MeshDecimator<PositionMaterialNormal> decimator(&mesh, &decimatedMesh);
     decimator.execute();
 
-    cout << "Decimation algorithm applyed to the mesh!" << endl;
+    ofLog(OF_LOG_NOTICE, "Decimation algorithm applyed to the mesh!");
 
-    cout << "Mesh : " << mesh.getNoOfVertices() << endl;
-	cout << "DecimatedMesh vertices: " << decimatedMesh.getNoOfVertices() << endl;
+    ofLog(OF_LOG_NOTICE, "polyvoxMesh : num vertices is:",  mesh.getNoOfVertices());
 
+    ofLog(OF_LOG_NOTICE, "DecimatedMesh: num. vertices is: ", decimatedMesh.getNoOfVertices());
 
     polyvox.setSurfaceMeshToRender(decimatedMesh);
 

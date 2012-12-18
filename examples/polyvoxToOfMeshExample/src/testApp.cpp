@@ -67,18 +67,21 @@ void testApp::setup(){
 
 	surfaceExtractor.execute();
 
-//	this is not working for now
+    //	this is not working for now
     //polyvox.extractSurface(mesh, volData);
 
-///if you want to render with standard gl calls use this
+    ///if you want to render with standard gl calls use this
     //polyvox.setSurfaceMeshToRender(mesh);
-    std::cout << "polyvox vertices: " << mesh.getNoOfVertices() << std::endl;
-    std::cout << "polyvox indices: " << mesh.getNoOfIndices() << std::endl;
+
+    ofLog(OF_LOG_NOTICE, "number of polyvox-indices is %d", mesh.getNoOfIndices());
+    ofLog(OF_LOG_NOTICE, "number of polyvox-vertices is %d", mesh.getNoOfVertices());
+
+
     OF_mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 
     polyvox.polyvoxToOfMesh(mesh,OF_mesh,true);
 
-    std::cout << "OF_mesh vertices: " << OF_mesh.getNumVertices() << std::endl;
+    ofLog(OF_LOG_NOTICE, "OF_mesh vertices in testApp is %d", mesh.getNoOfVertices());
 
     }
 

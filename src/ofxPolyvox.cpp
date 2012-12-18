@@ -141,7 +141,6 @@ void ofxPolyvox::draw(){
 	if(errCode != GL_NO_ERROR)
 	{
 	  //What has replaced getErrorString() in the latest OpenGL?
-	 //std::cout << "OpenGL Error: " << errCode << std::endl;
 	 ofLog(OF_LOG_ERROR, "OpenGL Error: " + errCode);
 	}
 

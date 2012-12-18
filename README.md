@@ -18,7 +18,8 @@ http://www.volumesoffun.com/polyvox-documentation/
 Anyway you can just use as it is without change polyvox version. For now you can create your polyvox mesh and draw with OpenGL calls via Vertex and Index buffer or with void polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNormal>& surfaceMesh, ofMesh& polyvxToOfMesh) outputting the polyvox mesh to an ofMesh.
 Just a note: if you want to use the LowPassFilter execute() you need to download instead the develop branch. 
 
-Tested with OF 0072.
+Tested with OF 0072. Updated to polyvox 0.2 version.
+Done some tests in armv7l arch with PandaboardES : ofxPolyvox::draw() it's not working at the moment. Should be adapted to GLES in a near future.
 
 roadmap:
 

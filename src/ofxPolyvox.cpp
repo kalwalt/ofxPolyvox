@@ -70,7 +70,7 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
     polyvxToOfMesh.addIndex(indx[i]);
      }
 
-	ofLog(OF_LOG_NOTICE, "number of indices is %d", polyvxToOfMesh.getNumIndices());	
+	ofLog(OF_LOG_NOTICE, "ofMesh: number of indices is %d", polyvxToOfMesh.getNumIndices());
 
     ofVec3f ofVecVertices;
 
@@ -87,7 +87,7 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
 
     }
 
-	 ofLog(OF_LOG_NOTICE, "number of vertices is %d", polyvxToOfMesh.getNumVertices());
+	 ofLog(OF_LOG_NOTICE, "ofMesh: number of vertices is %d", polyvxToOfMesh.getNumVertices());
 
     ofVec3f ofVecNormals;
 
@@ -103,7 +103,7 @@ void ofxPolyvox::polyvoxToOfMesh(const PolyVox::SurfaceMesh<PositionMaterialNorm
 
     }
 
-	ofLog(OF_LOG_NOTICE, "number of normals is %d", polyvxToOfMesh.getNumNormals());
+	ofLog(OF_LOG_NOTICE, "ofMesh: number of normals is %d", polyvxToOfMesh.getNumNormals());
 
 
     if(setColor){
